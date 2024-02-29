@@ -17,6 +17,9 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
   },
+  overlay: {
+    backgroundColor: "silver",
+  },
 };
 
 Modal.setAppElement("#modal");
@@ -28,6 +31,7 @@ const App = () => {
   const [alt, setAlt] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  // const [error, setError] = useState(null);
 
   function openModal(large, alt) {
     setIsOpen(true);
@@ -51,6 +55,7 @@ const App = () => {
 
   useEffect(() => {
     if (!query) return;
+
     const getData = async () => {
       try {
         const responce = await axios.get(
@@ -75,9 +80,10 @@ const App = () => {
   return (
     <div>
       <Form onSubmit={handleSubmit} />
-      {articles.length === 0 && <Error query={query} />}
-      {articles.length > 0 && (
+      {articles.length > 0 ? (
         <ListGallery data={articles} onClick={openModal} />
+      ) : (
+        <Error query={query} />
       )}
       {articles.length > 0 && <LoadMore onClick={LoadMoreFun} />}
       <Modal
