@@ -6,6 +6,7 @@ import ImageModal from "./ImageModal";
 import Modal from "react-modal";
 import Form from "./Form";
 import LoadMore from "./LoadMore";
+import Error from "./Error";
 
 const customStyles = {
   content: {
@@ -51,18 +52,22 @@ const App = () => {
   useEffect(() => {
     if (!query) return;
     const getData = async () => {
-      const responce = await axios.get(
-        `https://api.pexels.com/v1/search?query=${query}&page=${page}`,
-        {
-          headers: {
-            Authorization:
-              "uJJPgvAVKL0QT0gh97pQdXk9sV298JhgV7WrthlQG7JU3yZZk2T9FLxM",
-          },
-        }
-      );
-      setArticles((prevArticles) => {
-        return [...prevArticles, ...responce.data.photos];
-      });
+      try {
+        const responce = await axios.get(
+          `https://api.pexels.com/v1/search?query=${query}&page=${page}`,
+          {
+            headers: {
+              Authorization:
+                "uJJPgvAVKL0QT0gh97pQdXk9sV298JhgV7WrthlQG7JU3yZZk2T9FLxM",
+            },
+          }
+        );
+        setArticles((prevArticles) => {
+          return [...prevArticles, ...responce.data.photos];
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
     };
     getData();
   }, [query, page]);
@@ -70,7 +75,7 @@ const App = () => {
   return (
     <div>
       <Form onSubmit={handleSubmit} />
-
+      {articles.length === 0 && <Error query={query} />}
       {articles.length > 0 && (
         <ListGallery data={articles} onClick={openModal} />
       )}
