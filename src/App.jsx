@@ -83,6 +83,7 @@ const App = () => {
       {articles.length > 0 && (
         <ListGallery data={articles} onClick={openModal} />
       )}
+
       {articles.length > 0 && <LoadMore onClick={LoadMoreFun} />}
       <Modal
         isOpen={modalIsOpen}

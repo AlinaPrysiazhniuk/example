@@ -1,9 +1,7 @@
-export default function Error({ query, error }) {
+export default function Error() {
   return (
     <div>
-      <p>
-        Даних за запитом {query},{error} не знайдено
-      </p>
+      <p>Сталася помилка. Перезавантажте сторінку або змініть дані пошуку</p>
     </div>
   );
 }
