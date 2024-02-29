@@ -1,7 +1,9 @@
-export default function Error({ query }) {
+export default function Error({ query, error }) {
   return (
     <div>
-      <p>Даних за запитом {query} не знайдено</p>
+      <p>
+        Даних за запитом {query},{error} не знайдено
+      </p>
     </div>
   );
 }

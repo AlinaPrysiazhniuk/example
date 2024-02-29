@@ -6,7 +6,7 @@ import ImageModal from "./ImageModal";
 import Modal from "react-modal";
 import Form from "./Form";
 import LoadMore from "./LoadMore";
-import Error from "./Error";
+// import Error from "./Error";
 
 const customStyles = {
   content: {
@@ -31,7 +31,6 @@ const App = () => {
   const [alt, setAlt] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  // const [error, setError] = useState(null);
 
   function openModal(large, alt) {
     setIsOpen(true);
@@ -80,10 +79,9 @@ const App = () => {
   return (
     <div>
       <Form onSubmit={handleSubmit} />
-      {articles.length > 0 ? (
+
+      {articles.length > 0 && (
         <ListGallery data={articles} onClick={openModal} />
-      ) : (
-        <Error query={query} />
       )}
       {articles.length > 0 && <LoadMore onClick={LoadMoreFun} />}
       <Modal
