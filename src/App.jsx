@@ -5,6 +5,7 @@ import ListGallery from "./ListGallery";
 import ImageModal from "./ImageModal";
 import Modal from "react-modal";
 import Form from "./Form";
+import LoadMore from "./LoadMore";
 
 const customStyles = {
   content: {
@@ -25,6 +26,7 @@ const App = () => {
   const [large, setLarge] = useState("");
   const [alt, setAlt] = useState("");
   const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
 
   function openModal(large, alt) {
     setIsOpen(true);
@@ -38,13 +40,19 @@ const App = () => {
 
   function handleSubmit(query) {
     setQuery(query);
+    setArticles([]);
+    setPage(1);
+  }
+
+  function LoadMoreFun() {
+    setPage(() => page + 1);
   }
 
   useEffect(() => {
     if (!query) return;
     const getData = async () => {
       const responce = await axios.get(
-        `https://api.pexels.com/v1/search?query=${query}`,
+        `https://api.pexels.com/v1/search?query=${query}&page=${page}`,
         {
           headers: {
             Authorization:
@@ -52,10 +60,12 @@ const App = () => {
           },
         }
       );
-      setArticles(responce.data.photos);
+      setArticles((prevArticles) => {
+        return [...prevArticles, ...responce.data.photos];
+      });
     };
     getData();
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div>
@@ -64,6 +74,7 @@ const App = () => {
       {articles.length > 0 && (
         <ListGallery data={articles} onClick={openModal} />
       )}
+      {articles.length > 0 && <LoadMore onClick={LoadMoreFun} />}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
